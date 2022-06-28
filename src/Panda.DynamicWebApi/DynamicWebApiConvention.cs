@@ -75,7 +75,7 @@ namespace Panda.DynamicWebApi
             {
                 if (attr == null)
                 {
-                    throw new ArgumentException(nameof(attr));
+                    return;
                 }
 
                 if (!string.IsNullOrEmpty(attr.Module))

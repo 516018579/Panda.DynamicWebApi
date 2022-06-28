@@ -22,9 +22,10 @@ namespace Panda.DynamicWebApi
                 apiPrefix = assemblyDynamicWebApiOptions.ApiPrefix;
             }
 
-            if (assemblyDynamicWebApiOptions?.ApiVersion != null && AppConsts.DefaultGroupNameFormat != null)
+            var apiVersion = assemblyDynamicWebApiOptions?.ApiVersion ?? AppConsts.DefaultApiVersion;
+            if (apiVersion != null && AppConsts.DefaultGroupNameFormat != null)
             {
-                apiPrefix += (apiPrefix.EndsWith("/") ? "" : "/") + assemblyDynamicWebApiOptions.ApiVersion.ToString(AppConsts.DefaultGroupNameFormat);
+                apiPrefix += (apiPrefix.EndsWith("/") ? "" : "/") + apiVersion.ToString(AppConsts.DefaultGroupNameFormat);
             }
 
             return apiPrefix;

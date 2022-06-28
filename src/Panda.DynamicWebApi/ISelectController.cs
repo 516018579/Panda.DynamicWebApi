@@ -32,13 +32,6 @@ namespace Panda.DynamicWebApi
                 return true;
             }
 
-            //if (!typeof(IDynamicWebApi).IsAssignableFrom(type) ||
-            //    !typeInfo.IsPublic || typeInfo.IsAbstract || typeInfo.IsGenericType)
-            //{
-            //    return false;
-            //}
-
-
             var attr = ReflectionHelper.GetSingleAttributeOrDefaultByFullSearch<DynamicWebApiAttribute>(typeInfo);
 
             if (attr != null)
