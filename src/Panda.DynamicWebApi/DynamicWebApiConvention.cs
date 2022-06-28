@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ActionConstraints;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.AspNetCore.Mvc.Versioning.Conventions;
 using Microsoft.Extensions.DependencyInjection;
 using Panda.DynamicWebApi.Attributes;
 using Panda.DynamicWebApi.Helpers;
@@ -56,6 +57,18 @@ namespace Panda.DynamicWebApi
             }
         }
 
+        private void ConfigureVersion(ControllerModel controller, DynamicWebApiAttribute attr = null)
+        {
+            var version = attr != null ? new ApiVersion(attr.Version, 0) : AppConsts.DefaultApiVersion;
+
+            if (version != null)
+            {
+                var builder = new ControllerApiVersionConventionBuilder<ControllerModel>();
+                builder.HasApiVersion(version);
+                builder.ApplyTo(controller);
+            }
+        }
+
         private void ConfigureArea(ControllerModel controller, DynamicWebApiAttribute attr)
         {
             if (!controller.RouteValues.ContainsKey("area"))
@@ -79,6 +92,7 @@ namespace Panda.DynamicWebApi
 
         private void ConfigureDynamicWebApi(ControllerModel controller, DynamicWebApiAttribute controllerAttr)
         {
+            ConfigureVersion(controller);
             ConfigureApiExplorer(controller);
             ConfigureSelector(controller, controllerAttr);
             ConfigureParameters(controller);
@@ -342,7 +356,7 @@ namespace Panda.DynamicWebApi
 
         private AttributeRouteModel CreateActionRouteModel(string areaName, string controllerName, ActionModel action)
         {
-            var route =  _actionRouteFactory.CreateActionRouteModel(areaName, controllerName, action);
+            var route = _actionRouteFactory.CreateActionRouteModel(areaName, controllerName, action);
 
             return new AttributeRouteModel(new RouteAttribute(route));
         }

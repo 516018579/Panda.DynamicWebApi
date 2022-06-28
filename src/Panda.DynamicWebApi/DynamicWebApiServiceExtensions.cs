@@ -22,11 +22,11 @@ namespace Panda.DynamicWebApi
         /// <param name="application"></param>
         /// <param name="options"></param>
         /// <returns></returns>
-        public static IApplicationBuilder UseDynamicWebApi(this IApplicationBuilder application, Action<IServiceProvider,DynamicWebApiOptions> optionsAction)
+        public static IApplicationBuilder UseDynamicWebApi(this IApplicationBuilder application, Action<IServiceProvider, DynamicWebApiOptions> optionsAction)
         {
             var options = new DynamicWebApiOptions();
 
-            optionsAction?.Invoke(application.ApplicationServices,options);
+            optionsAction?.Invoke(application.ApplicationServices, options);
 
             options.Valid();
 
@@ -38,6 +38,8 @@ namespace Panda.DynamicWebApi
             AppConsts.FormBodyBindingIgnoredTypes = options.FormBodyBindingIgnoredTypes;
             AppConsts.GetRestFulActionName = options.GetRestFulActionName;
             AppConsts.AssemblyDynamicWebApiOptions = options.AssemblyDynamicWebApiOptions;
+            AppConsts.DefaultApiVersion = options.DefaultApiVersion;
+            AppConsts.DefaultGroupNameFormat = options.DefaultGroupNameFormat;
 
             var partManager = application.ApplicationServices.GetRequiredService<ApplicationPartManager>();
 
@@ -45,11 +47,11 @@ namespace Panda.DynamicWebApi
             var featureProviders = application.ApplicationServices.GetRequiredService<DynamicWebApiControllerFeatureProvider>();
             partManager.FeatureProviders.Add(featureProviders);
 
-            foreach(var assembly in options.AssemblyDynamicWebApiOptions.Keys)
+            foreach (var assembly in options.AssemblyDynamicWebApiOptions.Keys)
             {
                 var partFactory = ApplicationPartFactory.GetApplicationPartFactory(assembly);
 
-                foreach(var part in partFactory.GetApplicationParts(assembly))
+                foreach (var part in partFactory.GetApplicationParts(assembly))
                 {
                     partManager.ApplicationParts.Add(part);
                 }
@@ -65,8 +67,8 @@ namespace Panda.DynamicWebApi
         }
 
         public static IServiceCollection AddDynamicWebApiCore<TSelectController, TActionRouteFactory>(this IServiceCollection services)
-            where TSelectController: class,ISelectController
-            where TActionRouteFactory: class, IActionRouteFactory
+            where TSelectController : class, ISelectController
+            where TActionRouteFactory : class, IActionRouteFactory
         {
             services.AddSingleton<ISelectController, TSelectController>();
             services.AddSingleton<IActionRouteFactory, TActionRouteFactory>();
@@ -98,6 +100,8 @@ namespace Panda.DynamicWebApi
             AppConsts.FormBodyBindingIgnoredTypes = options.FormBodyBindingIgnoredTypes;
             AppConsts.GetRestFulActionName = options.GetRestFulActionName;
             AppConsts.AssemblyDynamicWebApiOptions = options.AssemblyDynamicWebApiOptions;
+            AppConsts.DefaultApiVersion = options.DefaultApiVersion;
+            AppConsts.DefaultGroupNameFormat = options.DefaultGroupNameFormat;
 
             var partManager = services.GetSingletonInstanceOrNull<ApplicationPartManager>();
 

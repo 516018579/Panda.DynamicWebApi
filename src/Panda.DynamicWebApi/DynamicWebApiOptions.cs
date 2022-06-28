@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Panda.DynamicWebApi
 {
@@ -59,6 +60,16 @@ namespace Panda.DynamicWebApi
         public Func<string, string> GetRestFulActionName { get; set; }
 
         /// <summary>
+        /// Api Version
+        /// </summary>
+        public ApiVersion DefaultApiVersion { get; set; }
+
+        /// <summary>
+        /// Api Version Name Format
+        /// </summary>
+        public string DefaultGroupNameFormat { get; set; }
+
+        /// <summary>
         /// Specifies the dynamic webapi options for the assembly.
         /// </summary>
         public Dictionary<Assembly, AssemblyDynamicWebApiOptions> AssemblyDynamicWebApiOptions { get; }
@@ -103,14 +114,16 @@ namespace Panda.DynamicWebApi
         /// <param name="assembly"></param>
         /// <param name="apiPreFix"></param>
         /// <param name="httpVerb"></param>
-        public void AddAssemblyOptions(Assembly assembly, string apiPreFix = null, string httpVerb = null)
+        /// <param name="apiVersion"></param>
+        /// <param name="groupNameFormat"></param>
+        public void AddAssemblyOptions(Assembly assembly, string apiPreFix = null, string httpVerb = null, ApiVersion apiVersion = null)
         {
             if (assembly == null)
             {
                 throw new ArgumentException($"{nameof(assembly)} can not be null.");
             }
 
-            this.AssemblyDynamicWebApiOptions[assembly] = new AssemblyDynamicWebApiOptions(apiPreFix, httpVerb);
+            this.AssemblyDynamicWebApiOptions[assembly] = new AssemblyDynamicWebApiOptions(apiPreFix, httpVerb, apiVersion);
         }
     }
 }

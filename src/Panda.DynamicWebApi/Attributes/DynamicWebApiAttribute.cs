@@ -14,6 +14,11 @@ namespace Panda.DynamicWebApi.Attributes
         /// </summary>
         public string Module { get; set; }
 
+        /// <summary>
+        /// Api Version
+        /// </summary>
+        public int Version { get; set; }
+
         internal static bool IsExplicitlyEnabledFor(Type type)
         {
             var remoteServiceAttr = type.GetTypeInfo().GetSingleAttributeOrNull<DynamicWebApiAttribute>();

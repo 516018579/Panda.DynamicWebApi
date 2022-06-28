@@ -2,16 +2,19 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Panda.DynamicWebApi
 {
-    public static class AppConsts
+    internal static class AppConsts
     {
         public static string DefaultHttpVerb { get; set; }
 
         public static string DefaultAreaName { get; set; } 
  
         public static string DefaultApiPreFix { get; set; }
+        public static string DefaultGroupNameFormat { get; set; }
+        public static ApiVersion DefaultApiVersion { get; set; }
 
         public static List<string> ControllerPostfixes { get; set; }
         public static List<string> ActionPostfixes { get; set; }

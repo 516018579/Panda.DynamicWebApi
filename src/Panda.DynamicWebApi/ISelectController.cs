@@ -16,26 +16,37 @@ namespace Panda.DynamicWebApi
         {
             var typeInfo = type.GetTypeInfo();
 
-            if (!typeof(IDynamicWebApi).IsAssignableFrom(type) ||
-                !typeInfo.IsPublic || typeInfo.IsAbstract || typeInfo.IsGenericType)
+            if (!typeInfo.IsPublic || typeInfo.IsAbstract || typeInfo.IsGenericType || typeInfo.IsInterface)
             {
                 return false;
             }
 
-
-            var attr = ReflectionHelper.GetSingleAttributeOrDefaultByFullSearch<DynamicWebApiAttribute>(typeInfo);
-
-            if (attr == null)
-            {
-                return false;
-            }
 
             if (ReflectionHelper.GetSingleAttributeOrDefaultByFullSearch<NonDynamicWebApiAttribute>(typeInfo) != null)
             {
                 return false;
             }
 
-            return true;
+            if (typeof(IDynamicWebApi).IsAssignableFrom(type))
+            {
+                return true;
+            }
+
+            //if (!typeof(IDynamicWebApi).IsAssignableFrom(type) ||
+            //    !typeInfo.IsPublic || typeInfo.IsAbstract || typeInfo.IsGenericType)
+            //{
+            //    return false;
+            //}
+
+
+            var attr = ReflectionHelper.GetSingleAttributeOrDefaultByFullSearch<DynamicWebApiAttribute>(typeInfo);
+
+            if (attr != null)
+            {
+                return true;
+            }
+
+            return false;
         }
     }
 }
